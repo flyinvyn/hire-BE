@@ -35,7 +35,7 @@
 [bcryptjs]: <https://www.npmjs.com/package/bcryptjs>
 [multer]: <https://www.npmjs.com/package/multer>
 [uuid]: <https://www.npmjs.com/package/uuid>
-[uuid]: <https://www.npmjs.com/package/redis>
+[redis]: <https://www.npmjs.com/package/redis>
 
 
 ## Installation
