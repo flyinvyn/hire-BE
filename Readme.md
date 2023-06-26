@@ -11,6 +11,11 @@
 | [Http-errors] | npm i http-errors |
 | [Helmet] | npm i helmet |
 | [Xss-Clean] | npm i xss |
+| [JWT] | npm i jsonwebtoken |
+| [bcryptjs] | npm i bcryptjs |
+| [multer] | npm i multer |
+| [uuid] | npm i uuid |
+| [redis] | npm i redis |
 
 
 
@@ -26,6 +31,11 @@
 [Http-errors]: <https://www.npmjs.com/package/http-errors>
 [Helmet]: <https://www.npmjs.com/package/helmet>
 [Xss-Clean]: <https://www.npmjs.com/package/xss>
+[JWT]: <https://www.npmjs.com/package/jsonwebtoken>
+[bcryptjs]: <https://www.npmjs.com/package/bcryptjs>
+[multer]: <https://www.npmjs.com/package/multer>
+[uuid]: <https://www.npmjs.com/package/uuid>
+[uuid]: <https://www.npmjs.com/package/redis>
 
 
 ## Installation
