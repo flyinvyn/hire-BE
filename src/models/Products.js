@@ -1,6 +1,6 @@
 const Pool = require("../config/db");
 
-const selectAllProduct = (limit, offset, sortby, sort) => {
+const selectAllProduct = ({limit, offset, sortby, sort}) => {
   return Pool.query(
     `SELECT * FROM product ORDER BY  ${sortby} ${sort} LIMIT ${limit} OFFSET ${offset}`
   );
@@ -14,20 +14,21 @@ const insertProduct = (data) => {
   const {
     id_product,
     name_product,
-    price,
     stock,
+    price,
     image_product,
     rate,
     shop_name,
   } = data;
   return Pool.query(
-    `INSERT INTO product(id_product,
+    `INSERT INTO product(
+        id_product,
         name_product,
-        price,
         stock,
+        price,
         image_product,
         rate,
-        shop_name) VALUES(${id_product},'${name_product}',${price},${stock},'${image_product}',${rate},'${shop_name}')`
+        shop_name) VALUES(${id_product},'${name_product}',${stock},${price},'${image_product}',${rate},'${shop_name}')`
   );
 };
 
@@ -72,22 +73,6 @@ const searchProduct = (name_product) => {
   return Pool.query(`SELECT * FROM product WHERE name_product ILIKE '%${name_product}%'`);
 };
 
-// const find = (name_product) => {
-//   return new Promise((resolve, reject) =>
-//     Pool.query(
-//       `SELECT *
-//       FROM product
-//       WHERE name_product ILIKE $1', [`%${ name_product}%`]`,
-//       (error, result) => {
-//         if (!error) {
-//           resolve(result);
-//         } else {
-//           reject(error);
-//         }
-//       }
-//     )
-//   );
-// };
 module.exports = {
   selectAllProduct,
   selectProduct,

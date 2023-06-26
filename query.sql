@@ -1,14 +1,14 @@
 CREATE DATABASE olshop;
 
 CREATE TABLE category (
-    id_category INT NOT NULL,
+    id_category SERIAL NOT NULL,
     name_category VARCHAR(255),
     image_category VARCHAR(255),
     PRIMARY KEY(id_category)
 );
 
 CREATE TABLE product (
-    id_product INT NOT NULL,
+    id_product SERIAL NOT NULL,
     name_product VARCHAR(255),
     price INT,
     stock INT,
@@ -18,8 +18,16 @@ CREATE TABLE product (
     PRIMARY KEY (id_product)
 );
 
+CREATE TABLE users(
+    id VARCHAR PRIMARY KEY,
+    email VARCHAR NOT NULL,
+    password VARCHAR NOT NULL,
+    fullname VARCHAR,
+    role VARCHAR
+);
+
 CREATE TABLE transactionn (
-    id_transaction INT NOT NULL,
+    id_transaction SERIAL NOT NULL,
     create_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     qty INT,
     shipping VARCHAR,

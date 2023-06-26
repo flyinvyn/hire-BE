@@ -1,6 +1,6 @@
 const Pool = require("../config/db");
 
-const selectAllTransaction = (limit, offset, sortby, sort) => {
+const selectAllTransaction = ({limit, offset, sortby, sort}) => {
   return Pool.query(
     `SELECT transactionn.id_transaction,transactionn.create_date,transactionn.qty,transactionn.shipping,transactionn.total_price,transactionn.adress,product.name_product,product.price,product.stock,product.image_product,product.rate,product.shop_name,
     category.name_category,category.image_category FROM transactionn JOIN product ON transactionn.id_product = product.id_product

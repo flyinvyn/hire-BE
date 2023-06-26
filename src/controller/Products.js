@@ -6,9 +6,10 @@ const {
   deleteProduct,
   countProduct,
   findId,
-  searchProduct
+  searchProduct,
 } = require("../models/Products");
 const commonHelper = require("../helper/common");
+const client = require("../config/redis")
 
 let productController = {
   getAllProduct: async (req, res) => {
@@ -18,7 +19,7 @@ let productController = {
       const offset = (page - 1) * limit;
       const sortby = req.query.sortby || "name_product";
       const sort = req.query.sort || "ASC";
-      const result = await selectAllProduct(limit, offset, sortby, sort);
+      const result = await selectAllProduct({ limit, offset, sortby, sort });
       const {
         rows: [count],
       } = await countProduct();
@@ -42,28 +43,28 @@ let productController = {
     }
   },
 
-
   getDetailProduct: (req, res) => {
     const id = Number(req.params.id);
     selectProduct(id)
       .then((result) => {
-        commonHelper.response(res, result.rows, 200, "get data success");
+        client.setEx(`product/${id}`,60*60,JSON.stringify(result.rows))
+        commonHelper.response(res, result.rows, 200, "get data success from database")
       })
       .catch((err) => res.send(err));
   },
   createProduct: async (req, res) => {
-    const { name_product, price, stock, image_product, rate, shop_name } =
-      req.body;
-    const {
-      rows: [count],
-    } = await countProduct();
+    const PORT = process.env.PORT || 5000;
+    const DB_HOST = process.env.DB_HOST || "localhost";
+    const image_product = req.file.filename;
+    const { name_product, price, stock, rate, shop_name } = req.body;
+    const {rows: [count]} = await countProduct();
     const id_product = Number(count.count) + 1;
     const data = {
       id_product,
       name_product,
       price,
       stock,
-      image_product,
+      image_product: `http://${DB_HOST}:${PORT}/img/${image_product}`,
       rate,
       shop_name,
     };
@@ -75,8 +76,11 @@ let productController = {
   },
   updateProduct: async (req, res) => {
     try {
-      const id_product = Number(req.params.id);
-      const { name_product, price, stock, image_product, rate, shop_name } =
+      const PORT = process.env.PORT || 5000;
+      const DB_HOST = process.env.DB_HOST || "localhost";
+      const image_product = req.file.filename;
+      const id_product = Number(req.params.id)
+      const { name_product, price, stock, rate, shop_name } =
         req.body;
       const { rowCount } = await findId(id_product);
       if (!rowCount) {
@@ -87,7 +91,7 @@ let productController = {
         name_product,
         price,
         stock,
-        image_product,
+        image_product: `http://${DB_HOST}:${PORT}/img/${image_product}`,
         rate,
         shop_name,
       };
@@ -117,14 +121,14 @@ let productController = {
     }
   },
 
-  searchProduct:async (req, res) => {
+  searchProduct: async (req, res) => {
     const search = req.query.keyword;
     await searchProduct(search)
       .then((result) => {
         commonHelper.response(res, result.rows, 200, "get data success");
       })
       .catch((err) => {
-        res.send(err)
+        res.send(err);
       });
   },
 };
