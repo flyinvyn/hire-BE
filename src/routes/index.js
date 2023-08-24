@@ -1,13 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const ProductRouter = require('../routes/Products')
-const CategoryRouter = require('../routes/Category')
-const TransactionnRouter = require('../routes/Transactionn')
 const userRouter = require('../routes/users')
+const skillRouter = require('../routes/skils')
+const experienceRouter = require('../routes/experinece')
+const portofolioRouter = require('../routes/portofolio')
+const recruiterRouter = require('../routes/recruiter')
 
-router.use('/products', ProductRouter)
-router.use('/category', CategoryRouter)
-router.use('/transaction', TransactionnRouter)
-router.use('/users', userRouter)
+router.use('/worker', userRouter)
+router.use('/skill', skillRouter)
+router.use('/experience', experienceRouter)
+router.use('/portofolio', portofolioRouter)
+router.use('/recruiter', recruiterRouter)
 
 module.exports = router

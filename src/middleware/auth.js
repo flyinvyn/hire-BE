@@ -26,7 +26,7 @@ const protect = (req, res, next) => {
 };
 
 const roleAdmin = (req,res,next) =>{
-  if(req.payload.role === "admin"){
+  if(req.payload.role === "seller"){
     next()
   }else{
     res.status(403).json({message:"Do not have acces"})
