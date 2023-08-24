@@ -8,6 +8,10 @@ router
     .get("/profile/:id", recruiterController.getSelectRecruiter)
     .get("/profile", recruiterController.getAllRecruiter)
     .put("/profile/:id", recruiterController.updateRecruiter)
-    .put("/profilephoto/:id",uploadRecruiter,recruiterController.updateAvatarRecruite)
+    .put(
+        "/profilephoto/:id",
+        uploadRecruiter,
+        recruiterController.updateAvatarRecruiter
+    )
     .delete("/profile/:id", recruiterController.deleteRecruiter);
 module.exports = router;
