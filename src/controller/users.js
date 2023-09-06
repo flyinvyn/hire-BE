@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { v4: uuidv4 } = require("uuid");
-const { create, findEmail, countUsers, findId, selectAllWorker, selectWorker, updateWorker, deleteWorker } = require("../models/users");
+const { create, findEmail, countUsers, findId, selectAllWorker, selectWorker, updateWorker, deleteWorker, updatePhoto } = require("../models/users");
 const jwt = require("jsonwebtoken");
 const authHelper = require("../helper/auth");
 const commonHelper = require("../helper/common");
@@ -49,13 +49,8 @@ let userController = {
   },
 
   registerUser: async (req, res) => {
-    const { name, phone_number, email, password, role, job_desk, domisili, work_place, description } = req.body;
+    const { name, phone_number, email, password, role } = req.body;
     const passwordHash = bcrypt.hashSync(password);
-    let photo = null;
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      photo = result.secure_url;
-    }
     const id_worker = uuidv4();
     data = {
       id_worker,
@@ -63,12 +58,7 @@ let userController = {
       phone_number,
       email,
       passwordHash,
-      role,
-      job_desk,
-      domisili,
-      work_place,
-      description,
-      photo
+      role
     };
     create(data)
       .then((result) =>
@@ -80,28 +70,19 @@ let userController = {
   updateWorker: async (req, res) => {
     try {
       const id_worker = String(req.params.id)
-      const { name, phone_number, email, role, job_desk, domisili, work_place, description } =
+      const { name, job_desk, domisili, work_place, description } =
         req.body;
       const { rowCount } = await findId(id_worker);
       if (!rowCount) {
         res.json({ message: "ID is Not Found" });
       }
-      let photo = null;
-            if (req.file) {
-                const result = await cloudinary.uploader.upload(req.file.path);
-                photo = result.secure_url;
-            }
       const data = {
         id_worker,
         name,
-        phone_number,
-        email,
-        role,
         job_desk,
         domisili,
         work_place,
         description,
-        photo
       };
       updateWorker(data)
         .then((result) =>
@@ -110,6 +91,32 @@ let userController = {
         .catch((err) => res.send(err));
     } catch (error) {
       console.log(error);
+    }
+  },
+
+  updatePhoto: async (req, res) => {
+    try {
+      const id_worker = String(req.params.id)
+      const { rowCount } = await findId(id_worker);
+      if (!rowCount) {
+        res.json({ message: "ID is Not Found" });
+      }
+      let photo = null;
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        photo = result.secure_url;
+      }
+      const data = {
+        id_worker,
+        photo
+      };
+      updatePhoto(data)
+      .then((result) =>
+          commonHelper.response(res, result.rows, 201, "Worker photo updated")
+        )
+        .catch((err) => res.send(err));
+    } catch (err) {
+      console.log(err);
     }
   },
 

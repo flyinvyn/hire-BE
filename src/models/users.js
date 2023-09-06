@@ -17,7 +17,7 @@ const selectWorker = (id_worker) => {
 };
 
 const create = (data) => {
-  const { id_worker, name, phone_number, email, passwordHash, role, job_desk, domisili, work_place, description, photo } = data;
+  const { id_worker, name, phone_number, email, passwordHash, role, job_desk, domisili, work_place, description } = data;
   return Pool.query(
     `INSERT INTO worker(
         id_worker,
@@ -25,12 +25,7 @@ const create = (data) => {
         phone_number,
         email,
         password,
-        role,
-        job_desk,
-        domisili,
-        work_place,
-        description,
-        photo
+        role
         ) VALUES('${id_worker}','${name}','${phone_number}','${email}','${passwordHash}','${role}','${job_desk}','${domisili}','${work_place}','${description}','${photo}')`
   );
 };
@@ -39,18 +34,24 @@ const updateWorker = (data) => {
   const {
     id_worker,
     name,
-    phone_number,
-    email,
-    role,
     job_desk,
     domisili,
     work_place,
     description,
+  } = data;
+  return Pool.query(
+    `UPDATE worker SET name='${name}', job_desk='${job_desk}',domisili='${domisili}',work_place='${work_place}',
+      description='${description}' WHERE id_worker = '${id_worker}'`
+  );
+};
+
+const updatePhoto = (data) => {
+  const {
+    id_worker,
     photo
   } = data;
   return Pool.query(
-    `UPDATE worker SET name='${name}', phone_number='${phone_number}', email='${email}', role='${role}', job_desk='${job_desk}',domisili='${domisili}',work_place='${work_place}',
-      description='${description}',photo='${photo}' WHERE id_worker = '${id_worker}'`
+    `UPDATE worker SET photo='${photo}' WHERE id_worker = '${id_worker}'`
   );
 };
 
@@ -97,5 +98,6 @@ module.exports = {
   deleteWorker,
   findEmail,
   countUsers,
+  updatePhoto,
   findId
 };
