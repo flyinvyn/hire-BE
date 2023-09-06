@@ -17,7 +17,7 @@ const selectWorker = (id_worker) => {
 };
 
 const create = (data) => {
-  const { id_worker, name, phone_number, email, passwordHash, role, job_desk, domisili, work_place, description } = data;
+  const { id_worker, name, phone_number, email, passwordHash, role } = data;
   return Pool.query(
     `INSERT INTO worker(
         id_worker,
@@ -26,7 +26,7 @@ const create = (data) => {
         email,
         password,
         role
-        ) VALUES('${id_worker}','${name}','${phone_number}','${email}','${passwordHash}','${role}','${job_desk}','${domisili}','${work_place}','${description}'`
+        ) VALUES('${id_worker}','${name}','${phone_number}','${email}','${passwordHash}','${role}'`
   );
 };
 

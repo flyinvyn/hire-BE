@@ -50,6 +50,10 @@ let userController = {
 
   registerUser: async (req, res) => {
     const { name, phone_number, email, password, role } = req.body;
+    const { rowCount } = await findEmail(email);
+    if (rowCount) {
+      return res.json({ message: "Email Already Taken" });
+    }
     const passwordHash = bcrypt.hashSync(password);
     const id_worker = uuidv4();
     data = {
