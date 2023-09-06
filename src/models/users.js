@@ -26,7 +26,7 @@ const create = (data) => {
         email,
         password,
         role
-        ) VALUES('${id_worker}','${name}','${phone_number}','${email}','${passwordHash}','${role}','${job_desk}','${domisili}','${work_place}','${description}','${photo}')`
+        ) VALUES('${id_worker}','${name}','${phone_number}','${email}','${passwordHash}','${role}','${job_desk}','${domisili}','${work_place}','${description}'`
   );
 };
 
