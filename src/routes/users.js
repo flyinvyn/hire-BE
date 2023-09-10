@@ -1,18 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const userController = require("../controller/users");
-// const { protect } = require("../middleware/auth");
-const upload = require('../middleware/uploadProfile')
-
+const uploadWorker = require("../middleware/uploadProfile");
+const workerController = require("../controller/users");
 router
-  .get("/", userController.getAllUsers)
-  .get("/:id", userController.getDetailWorker)
-  .put("/:id", userController.updateWorker)
-  .put("/update/:id",upload, userController.updatePhoto)
-  .delete("/:id", userController.deleteWorker)
-  .post("/register", userController.registerUser)
-  .post("/login", userController.loginUser)
-  .get("/profile", userController.profile)
-  .post("/refreshToken", userController.refreshToken)
-
+  .post("/register", workerController.registerWorker)
+  .post("/login", workerController.loginWorker)
+  .get("/profile/:id", workerController.getSelectWorker)
+  .get("/profile", workerController.getAllWorker)
+  .get("/verify", workerController.VerifyAccount)
+  .put("/profile/:id", workerController.updateWorker)
+  .put("/profilephoto/:id", uploadWorker, workerController.updateAvatarWorker)
+  .delete("/profile/:id", workerController.deleteWorker);
 module.exports = router;

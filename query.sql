@@ -1,15 +1,24 @@
 CREATE DATABASE hire;
 
-CREATE TABLE
-    users(
-        id_user VARCHAR PRIMARY KEY NOT NULL,
-        name VARCHAR,
-        email VARCHAR,
-        company VARCHAR,
-        job_desk VARCHAR,
-        no_hp VARCHAR,
-        password VARCHAR
-    );
+-- CREATE TABLE
+
+--     users(
+
+--         id_user VARCHAR PRIMARY KEY NOT NULL,
+
+--         name VARCHAR,
+
+--         email VARCHAR,
+
+--         company VARCHAR,
+
+--         job_desk VARCHAR,
+
+--         no_hp VARCHAR,
+
+--         password VARCHAR
+
+--     );
 
 CREATE TABLE
     worker(
@@ -23,8 +32,38 @@ CREATE TABLE
         domisili VARCHAR NULL,
         work_place VARCHAR NULL,
         description VARCHAR NULL,
-        photo VARCHAR NULL
+        photo VARCHAR NULL,
+        verify text not null,
+        updated_on timestamp default CURRENT_TIMESTAMP not null
     );
+
+CREATE FUNCTION UPDATE_UPDATED_ON_WORKER() RETURNS 
+TRIGGER AS $$ 
+	$$ $$ BEGIN NEW.updated_on = now();
+
+
+RETURN NEW;
+
+END;
+
+$$ language 'plpgsql';
+
+CREATE TRIGGER UPDATE_USERS_UPDATED_ON 
+	UPDATE_USERS_UPDATED_ON update_users_updated_on BEFORE
+	UPDATE ON worker FOR EACH ROW
+	EXECUTE
+	    PROCEDURE update_updated_on_users();
+
+
+create table
+    worker_verification (
+        id text not null,
+        worker_id text,
+        token text,
+        created_on timestamp default CURRENT_TIMESTAMP not null,
+        constraint worker foreign key(worker_id) references worker(id_worker) ON DELETE CASCADE,
+        primary key (id)
+    )
 
 -- id_skill varchar NULL,
 
@@ -87,24 +126,50 @@ CREATE TABLE
         rec_position VARCHAR(255),
         rec_password VARCHAR(255),
         rec_confirmpassword VARCHAR(255),
-        rec_photo VARCHAR(255)
+        rec_photo VARCHAR(255),
+        verify text not null,
+        updated_on timestamp default CURRENT_TIMESTAMP not null
     );
 
-INSERT INTO
-    worker(
-        id_worker,
-        email,
-        password,
-        name,
-        phone_number
+CREATE FUNCTION UPDATE_UPDATED_ON_USERS() RETURNS TRIGGER 
+AS $$ 
+	$$ $$ BEGIN NEW.updated_on = now();
+
+
+RETURN NEW;
+
+END;
+
+$$ language 'plpgsql';
+
+CREATE TRIGGER UPDATE_USERS_UPDATED_ON 
+	UPDATE_USERS_UPDATED_ON update_users_updated_on BEFORE
+	UPDATE ON recruiter FOR EACH ROW
+	EXECUTE
+	    PROCEDURE update_updated_on_users();
+
+
+create table
+    users_verification (
+        id text not null,
+        recruiter_id text,
+        token text,
+        created_on timestamp default CURRENT_TIMESTAMP not null,
+        constraint recruiter foreign key(recruiter_id) references recruiter(rec_id) ON DELETE CASCADE,
+        primary key (id)
     )
-VALUES (
-        1,
-        'a@mail.com',
-        '123',
-        'alfin',
-        '089'
-    );
+
+create table hire(
+    id VARCHAR not null,
+    offering VARCHAR,
+    description TEXT,
+    id_worker VARCHAR,
+    name VARCHAR,
+    email VARCHAR,
+    rec_id VARCHAR,
+    rec_email VARCHAR,
+    rec_compname VARCHAR
+);
 
 SELECT
     user_worker.id,
